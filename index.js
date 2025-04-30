@@ -101,6 +101,7 @@ async function run() {
     const reviewCollection = db.collection("reviews");
     const cartCollection = db.collection("carts");
     const paymentCollection = db.collection("payments");
+    const categoryCollection = db.collection('categories');
 
     console.log("Successfully connected to MongoDB!");
 
@@ -145,6 +146,125 @@ async function run() {
         })
         .send({ success: true });
     });
+
+
+
+
+// bikroy category manager
+
+// Get category and its direct children by name
+// app.get('/api/categories/:name', async (req, res) => {
+//   const name = req.params.name;
+//   const parent = await categoryCollection.findOne({ name });
+//   if (!parent) return res.status(404).json({ error: 'Category not found' });
+//   const children = await categoryCollection.find({ parentId: parent._id }).toArray();
+//   res.json({ parent, children });
+// });
+
+// // Create a new subcategory or L1 category
+// app.post('/api/categories', async (req, res) => {
+//   const { name, parentId = null } = req.body;
+//   const newCategory = { name, parentId: parentId ? new ObjectId(parentId) : null };
+//   const result = await categoryCollection.insertOne(newCategory);
+//   res.json(result);
+// });
+
+// // Update a category name
+// app.put('/api/categories/:id', async (req, res) => {
+//   const { id } = req.params;
+//   const { name } = req.body;
+//   const result = await categoryCollection.updateOne(
+//     { _id: new ObjectId(id) },
+//     { $set: { name } }
+//   );
+//   res.json(result);
+// });
+
+// // Delete a category by ID
+// app.delete('/api/categories/:id', async (req, res) => {
+//   const { id } = req.params;
+//   const result = await categoryCollection.deleteOne({ _id: new ObjectId(id) });
+//   res.json(result);
+// });
+
+
+
+
+// Get category by name and its children
+app.get('/api/categories/:name', async (req, res) => {
+  try {
+    const name = req.params.name.toLowerCase();
+    const parent = await categoryCollection.findOne({ name });
+    if (!parent) return res.status(404).json({ error: 'Category not found' });
+
+    const children = await categoryCollection.find({ parentId: parent._id }).toArray();
+    res.json({ parent, children });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Create new category (L1 or subcategory)
+app.post('/api/categories', async (req, res) => {
+  try {
+    const { name, parentId = null } = req.body;
+    const newCategory = {
+      name: name.toLowerCase(),
+      parentId: parentId ? new ObjectId(parentId) : null,
+    };
+    const result = await categoryCollection.insertOne(newCategory);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Update category name
+app.put('/api/categories/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { name } = req.body;
+    const result = await categoryCollection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { name: name.toLowerCase() } }
+    );
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete category
+app.delete('/api/categories/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await categoryCollection.deleteOne({ _id: new ObjectId(id) });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // public route
     //menuPage
