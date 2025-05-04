@@ -150,45 +150,8 @@ async function run() {
 
 
 
-// bikroy category manager
 
-// Get category and its direct children by name
-// app.get('/api/categories/:name', async (req, res) => {
-//   const name = req.params.name;
-//   const parent = await categoryCollection.findOne({ name });
-//   if (!parent) return res.status(404).json({ error: 'Category not found' });
-//   const children = await categoryCollection.find({ parentId: parent._id }).toArray();
-//   res.json({ parent, children });
-// });
-
-// // Create a new subcategory or L1 category
-// app.post('/api/categories', async (req, res) => {
-//   const { name, parentId = null } = req.body;
-//   const newCategory = { name, parentId: parentId ? new ObjectId(parentId) : null };
-//   const result = await categoryCollection.insertOne(newCategory);
-//   res.json(result);
-// });
-
-// // Update a category name
-// app.put('/api/categories/:id', async (req, res) => {
-//   const { id } = req.params;
-//   const { name } = req.body;
-//   const result = await categoryCollection.updateOne(
-//     { _id: new ObjectId(id) },
-//     { $set: { name } }
-//   );
-//   res.json(result);
-// });
-
-// // Delete a category by ID
-// app.delete('/api/categories/:id', async (req, res) => {
-//   const { id } = req.params;
-//   const result = await categoryCollection.deleteOne({ _id: new ObjectId(id) });
-//   res.json(result);
-// });
-
-
-
+// _________________________________________bikroy project start
 
 // Get category by name and its children
 app.get('/api/categories/:name', async (req, res) => {
@@ -262,20 +225,7 @@ app.get('/api/categories-all', async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// _____________________________________________________________bikroy project end
 
 
 
