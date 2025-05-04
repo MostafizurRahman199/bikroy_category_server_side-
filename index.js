@@ -204,6 +204,7 @@ app.get('/api/categories/:name', async (req, res) => {
   }
 });
 
+
 // Create new category (L1 or subcategory)
 app.post('/api/categories', async (req, res) => {
   try {
@@ -218,6 +219,7 @@ app.post('/api/categories', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // Update category name
 app.put('/api/categories/:id', async (req, res) => {
@@ -234,12 +236,25 @@ app.put('/api/categories/:id', async (req, res) => {
   }
 });
 
+
 // Delete category
 app.delete('/api/categories/:id', async (req, res) => {
   try {
     const id = req.params.id;
     const result = await categoryCollection.deleteOne({ _id: new ObjectId(id) });
     res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
+// Get all categories (for building tree)
+app.get('/api/categories-all', async (req, res) => {
+  try {
+    const categories = await categoryCollection.find().toArray();
+    res.json(categories);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
