@@ -25,9 +25,7 @@ const PORT = process.env.PORT || 5000;
 app.use(
   cors({
     origin: [
-      "http://localhost:4173",
-      "http://localhost:5173",
-      "https://cafebarisal-by-mostafiz.netlify.app",
+         "bikroy-category.netlify.app",
     ],
 
     methods: ["GET", "POST", "PUT", "DELETE"],
