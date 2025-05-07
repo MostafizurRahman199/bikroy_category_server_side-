@@ -225,7 +225,82 @@ app.get('/api/categories-all', async (req, res) => {
 
 
 
+
+
+app.get('/api/categories-chain-search/:keyword', async (req, res) => {
+  try {
+    const keyword = req.params.keyword.toLowerCase();
+
+    const allCategories = await categoryCollection.find().toArray();
+
+    const categoryMap = {};
+    allCategories.forEach(cat => {
+      categoryMap[cat._id.toString()] = cat;
+    });
+
+    const matched = allCategories.filter(cat =>
+      cat.name.toLowerCase().includes(keyword)
+    );
+
+    if (!matched.length) {
+      return res.json([]);
+    }
+
+    const resultMap = new Map();
+
+    const addWithRelations = (cat) => {
+      if (!cat || resultMap.has(cat._id.toString())) return;
+
+      resultMap.set(cat._id.toString(), cat);
+
+      if (cat.parentId) {
+        const parent = categoryMap[cat.parentId.toString()];
+        if (parent) addWithRelations(parent);
+      }
+
+      allCategories
+        .filter(c => c.parentId && c.parentId.toString() === cat._id.toString())
+        .forEach(child => addWithRelations(child));
+    };
+
+    matched.forEach(cat => addWithRelations(cat));
+
+    res.json(Array.from(resultMap.values()));
+  } catch (error) {
+    console.error('Error in category chain search:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
 // _____________________________________________________________bikroy project end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
