@@ -25,12 +25,13 @@ const PORT = process.env.PORT || 5000;
 app.use(
   cors({
     origin: [
-         "bikroy-category.netlify.app",
+          "http://localhost:5173",
+         "https://bikroy-category.netlify.app",
     ],
 
     methods: ["GET", "POST", "PUT", "DELETE"],
-
     credentials: true,
+
   })
 );
 
@@ -131,7 +132,7 @@ async function run() {
           httpOnly: true,
           secure: true,
           sameSite: "none",
-          // secure: process.env.NODE_ENV === "production",
+          secure: process.env.NODE_ENV === "production",
         })
         .send({ success: true });
     });
@@ -140,7 +141,7 @@ async function run() {
       res
         .clearCookie("token", {
           httpOnly: true,
-          // secure: process.env.NODE_ENV === "production",
+          secure: process.env.NODE_ENV === "production",
         })
         .send({ success: true });
     });
